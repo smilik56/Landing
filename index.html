@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Юбка миди Inedit | Оформление заказа</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a1a1a;
+            --accent: #D4AF37;
+            --light: #f9f9f9;
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Montserrat', sans-serif; color: #333; line-height: 1.6; scroll-behavior: smooth; }
+        h1, h2 { font-family: 'Playfair Display', serif; text-transform: uppercase; letter-spacing: 2px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        header { padding: 20px 0; position: absolute; width: 100%; z-index: 10; }
+        .logo { font-weight: 600; font-size: 1.5rem; color: var(--primary); text-decoration: none; letter-spacing: 3px; }
+
+        /* Hero */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(to right, rgba(255,255,255,0.9), rgba(255,255,255,0.1)), 
+                        url('https://inedit.ua/assets/cache/images/ea793d5d8ba5e9cb5bbb180dc8984487.webp') no-repeat center right / contain;
+            background-color: #f4f4f4;
+        }
+        .hero-content { max-width: 600px; padding: 20px; animation: fadeInUp 1s forwards; }
+        .btn { display: inline-block; padding: 18px 45px; background: var(--primary); color: white; text-decoration: none; font-weight: 600; cursor: pointer; border: 1px solid var(--primary); transition: var(--transition); }
+        .btn:hover { background: transparent; color: var(--primary); }
+
+        /* Carousel */
+        .section { padding: 80px 0; }
+        .section-title { text-align: center; margin-bottom: 40px; }
+        .carousel-viewport { position: relative; background: var(--light); height: 500px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid #eee; }
+        #main-image { max-width: 100%; height: 100%; object-fit: contain; transition: transform 0.6s ease; }
+
+        /* Order Form & Sizes */
+        .order-box { max-width: 500px; margin: 0 auto; padding: 40px; border: 1px solid #eee; background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .size-selector { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
+        .size-btn { width: 45px; height: 45px; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; }
+        .size-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+        
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; font-size: 0.8rem; margin-bottom: 5px; text-transform: uppercase; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #ddd; font-family: inherit; }
+
+        /* Modal Table */
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; }
+        .modal-content { background: #fff; padding: 40px; max-width: 500px; width: 90%; position: relative; }
+        .close-modal { position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        table th, table td { border: 1px solid #eee; padding: 10px; text-align: center; }
+
+        .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <header><div class="container"><a href="#" class="logo">INEDIT.</a></div></header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Элегантность в деталях</h1>
+                <p>Классическая юбка миди для вашего идеального гардероба.</p><br>
+                <a href="#order" class="btn">ОФОРМИТЬ ЗАКАЗ</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section container reveal">
+        <h2 class="section-title">Просмотр модели</h2>
+        <div class="carousel-viewport">
+            <img src="https://inedit.ua/assets/cache/images/ea793d5d8ba5e9cb5bbb180dc8984487.webp" id="main-image">
+        </div>
+        <div style="text-align:center; margin-top:20px;">
+            <button class="btn" onclick="toggleMirror()" style="padding:10px 20px">Сменить ракурс</button>
+        </div>
+    </section>
+
+    <section id="order" class="section container reveal" style="text-align:center;">
+        <div class="order-box">
+            <h2>Ваш заказ</h2>
+            <p style="color:var(--accent); font-weight:600; margin-top:10px;">Цена: 1 890 ₴</p>
+            
+            <div class="size-selector" id="sizeSelector">
+                <div class="size-btn" onclick="setSize('S', this)">S</div>
+                <div class="size-btn" onclick="setSize('M', this)">M</div>
+                <div class="size-btn" onclick="setSize('L', this)">L</div>
+            </div>
+            <p><a href="javascript:void(0)" onclick="openModal()" style="font-size:0.8rem; color:#888;">Таблица размеров</a></p>
+            
+            <form id="tgForm" style="margin-top:30px;">
+                <div class="form-group">
+                    <label>Ваше имя</label>
+                    <input type="text" id="name" placeholder="Иван Иванов" required>
+                </div>
+                <div class="form-group">
+                    <label>Телефон</label>
+                    <input type="tel" id="phone" placeholder="+380..." required>
+                </div>
+                <button type="submit" class="btn" style="width:100%">ОТПРАВИТЬ В TELEGRAM</button>
+            </form>
+            <div id="status" style="margin-top:15px; font-size:0.9rem;"></div>
+        </div>
+    </section>
+
+    <div id="sizeModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h3>Таблица размеров (см)</h3>
+            <table>
+                <tr><th>Размер</th><th>Талия</th><th>Бедра</th><th>Длина</th></tr>
+                <tr><td>S</td><td>64-68</td><td>90-94</td><td>75</td></tr>
+                <tr><td>M</td><td>69-73</td><td>95-99</td><td>76</td></tr>
+                <tr><td>L</td><td>74-78</td><td>100-104</td><td>77</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let selectedSize = '';
+        let isMirrored = false;
+
+        function setSize(size, el) {
+            selectedSize = size;
+            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function toggleMirror() {
+            isMirrored = !isMirrored;
+            document.getElementById('main-image').style.transform = isMirrored ? 'scaleX(-1)' : 'scaleX(1)';
+        }
+
+        function openModal() { document.getElementById('sizeModal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('sizeModal').style.display = 'none'; }
+
+        // Работа с Telegram
+        const botToken = 'ТВОЙ_ТОКЕН_ОТ_BOTFATHER'; // Впиши токен
+        const chatId = 'ТВОЙ_CHAT_ID'; // Впиши ID чата
+
+        document.getElementById('tgForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if(!selectedSize) { alert('Пожалуйста, выберите размер'); return; }
+
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const status = document.getElementById('status');
+            
+            const message = `🚀 Новый заказ!\n👗 Юбка миди\n📏 Размер: ${selectedSize}\n👤 Имя: ${name}\n📞 Тел: ${phone}`;
+
+            status.innerText = "Отправка...";
+
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: chatId, text: message })
+            })
+            .then(res => {
+                if(res.ok) {
+                    status.style.color = "green";
+                    status.innerText = "Заказ успешно отправлен! Мы свяжемся с вами.";
+                    this.reset();
+                } else {
+                    status.style.color = "red";
+                    status.innerText = "Ошибка (проверьте настройки Telegram)";
+                }
+            });
+        });
+
+        // Reveal animation
+        window.addEventListener('scroll', () => {
+            document.querySelectorAll('.reveal').forEach(el => {
+                if(el.getBoundingClientRect().top < window.innerHeight - 50) el.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
